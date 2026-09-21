@@ -107,43 +107,28 @@
         <span class="w"><span class="wi" style="transition-delay:.14s">do</span></span>
       </h2>
     </div>
-    <div class="scroll-stack">
-  <div class="scroll-stack-inner">
-
-    <article class="scroll-stack-card">
-      <span class="svc-index">01 — Social</span>
-      <h3 class="svc-card-title">Social Media</h3>
-      <p class="svc-body">Strategy, content planning and daily management across all platforms. We build communities, not just followers.</p>
+    <div class="services-accordion" id="servicesAccordion">
+    <article class="service-item">
+      <button class="service-trigger" type="button" id="service-trigger-1" aria-expanded="false" aria-controls="service-panel-1"><span class="service-number">01</span><span class="service-name">Social Media</span><span class="service-icon" aria-hidden="true">+</span></button>
+      <div class="service-panel" id="service-panel-1" role="region" aria-labelledby="service-trigger-1"><div class="service-panel-inner"><p>Strategy, content planning and daily management across all platforms. We build communities, not just followers.</p></div></div>
     </article>
-
-    <article class="scroll-stack-card">
-      <span class="svc-index">02 — Content</span>
-      <h3 class="svc-card-title">Content Production</h3>
-      <p class="svc-body">Photo and video production built for brands that need content people actually want to watch.</p>
+    <article class="service-item">
+      <button class="service-trigger" type="button" id="service-trigger-2" aria-expanded="false" aria-controls="service-panel-2"><span class="service-number">02</span><span class="service-name">Content Production</span><span class="service-icon" aria-hidden="true">+</span></button>
+      <div class="service-panel" id="service-panel-2" role="region" aria-labelledby="service-trigger-2"><div class="service-panel-inner"><p>Photo and video production built for brands that need content people actually want to watch.</p></div></div>
     </article>
-
-    <article class="scroll-stack-card">
-      <span class="svc-index">02 — Influence</span>
-      <h3 class="svc-card-title">Influencer Marketing</h3>
-      <p class="svc-body">Finding the right creators, handling the deals and running campaigns from start to finish.</p>
+    <article class="service-item">
+      <button class="service-trigger" type="button" id="service-trigger-3" aria-expanded="false" aria-controls="service-panel-3"><span class="service-number">03</span><span class="service-name">Influencer Marketing</span><span class="service-icon" aria-hidden="true">+</span></button>
+      <div class="service-panel" id="service-panel-3" role="region" aria-labelledby="service-trigger-3"><div class="service-panel-inner"><p>Finding the right creators, handling the deals and running campaigns from start to finish.</p></div></div>
     </article>
-
-    <article class="scroll-stack-card">
-      <span class="svc-index">03 — Paid</span>
-      <h3 class="svc-card-title">Paid Media</h3>
-      <p class="svc-body">Strategic paid campaigns across platforms, continuously optimized to drive stronger results.</p>
+    <article class="service-item">
+      <button class="service-trigger" type="button" id="service-trigger-4" aria-expanded="false" aria-controls="service-panel-4"><span class="service-number">04</span><span class="service-name">Paid Media</span><span class="service-icon" aria-hidden="true">+</span></button>
+      <div class="service-panel" id="service-panel-4" role="region" aria-labelledby="service-trigger-4"><div class="service-panel-inner"><p>Strategic paid campaigns across platforms, continuously optimized to drive stronger results.</p></div></div>
     </article>
-
-    <article class="scroll-stack-card">
-      <span class="svc-index">04 — Casting</span>
-      <h3 class="svc-card-title">Casting &amp; Talent Management</h3>
-      <p class="svc-body">Sourcing and managing models, actors and creators for brands, agencies and production houses.</p>
+    <article class="service-item">
+      <button class="service-trigger" type="button" id="service-trigger-5" aria-expanded="false" aria-controls="service-panel-5"><span class="service-number">05</span><span class="service-name">Casting &amp; Talent Management</span><span class="service-icon" aria-hidden="true">+</span></button>
+      <div class="service-panel" id="service-panel-5" role="region" aria-labelledby="service-trigger-5"><div class="service-panel-inner"><p>Sourcing and managing models, actors and creators for brands, agencies and production houses.</p></div></div>
     </article>
-
-    <div class="scroll-stack-end"></div>
-
-  </div>
-</div>
+    </div>
   </div>
 </section>
 
@@ -162,26 +147,7 @@
       </h2>
     </div>
 
-    <div class="work-gallery" id="workGallery">
-  <div class="sphere-root" id="workSphere">
-
-    <div class="sphere-main" id="workSphereMain" aria-label="Our Work video gallery">
-      <div class="stage">
-        <div class="sphere" id="workSphereObject"></div>
-      </div>
-
-      <div class="overlay"></div>
-      <div class="overlay overlay--blur"></div>
-
-      <div class="edge-fade edge-fade--top"></div>
-      <div class="edge-fade edge-fade--bottom"></div>
-
-    </div>
-
-  </div>
-</div>
-
-<p class="work-gallery-cue" id="workGalleryCue">Drag to explore <i>·</i> Select a film</p>
+    <div class="work-gallery" id="workGallery" aria-label="Our Work video gallery"></div>
 
 <div class="work-viewer" id="workViewer" role="dialog" aria-modal="true" aria-labelledby="workViewerTitle" aria-hidden="true">
   <div class="work-viewer-backdrop" id="workViewerBackdrop"></div>
