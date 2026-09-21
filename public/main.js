@@ -8,8 +8,16 @@
   /* ---------- INTRO WIPE ---------- */
   var intro = document.getElementById('intro');
   function lift() { if (intro) intro.classList.add('gone'); }
-  if (reduceMotion) { lift(); }
-  else { window.addEventListener('load', function () { setTimeout(lift, 1150); }); setTimeout(lift, 2600); }
+  var introSeen = false;
+  try { introSeen = sessionStorage.getItem('virative-intro-seen') === '1'; } catch (e) {}
+  if (reduceMotion || introSeen) { lift(); }
+  else {
+    window.addEventListener('load', function () { setTimeout(lift, 1150); });
+    setTimeout(lift, 2600);
+    window.addEventListener('pointerdown', lift, { once: true });
+    window.addEventListener('keydown', function skipIntro(event) { if (event.key === 'Escape') { lift(); window.removeEventListener('keydown', skipIntro); } });
+    try { sessionStorage.setItem('virative-intro-seen', '1'); } catch (e) {}
+  }
 
   /* ============================================================
      WORDMARK — LETTER RESONANCE
@@ -32,6 +40,7 @@
   var letters = [];
   var phase = 0;
 
+  wmEl.textContent = '';
   BRAND.split('').forEach(function (ch, i) {
     var s = document.createElement('span');
     s.className = 'wm-l' + (i >= 4 ? ' suf' : '');
@@ -97,6 +106,16 @@
     var speed = parseFloat(mq.getAttribute('data-speed')) || 24;
     row.style.setProperty('--dur', speed + 's');
   });
+
+  /* ---------- MOBILE NAVIGATION ---------- */
+  var nav = document.querySelector('.nav');
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if (nav && navToggle && navLinks) {
+    function closeNav() { nav.classList.remove('open'); navLinks.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); }
+    navToggle.addEventListener('click', function () { var open = !nav.classList.contains('open'); nav.classList.toggle('open', open); navLinks.classList.toggle('open', open); navToggle.setAttribute('aria-expanded', String(open)); });
+    navLinks.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeNav); });
+  }
 
   /* ============================================================
      SCROLL ENGINE — progress, hero parallax, hue-shifting
@@ -227,9 +246,9 @@ var stackCards = Array.prototype.slice.call(
 
 if (!reduceMotion && stackCards.length) {
   var stackScaleStep = 0.07;
-  var stackBlur = 4;
-  var stackDim = 0.28;
-  var stackPeek = 26;
+  var stackBlur = 1.5;
+  var stackDim = 0.16;
+  var stackPeek = 18;
 
   function updateScrollStack() {
     var viewport = window.innerHeight;
@@ -380,16 +399,16 @@ if (workGallery) {
    * Your 15 videos are repeated across the available tiles.
    */
 
-  var segments = 35;
+  var segments = 24;
 
   var xColumns = [];
 
   for (var c = 0; c < segments; c++) {
-    xColumns.push(-37 + (c * 2));
-  });
+    xColumns.push(-23 + (c * 2));
+  }
 
-  var evenRows = [-4, -2, 0, 2, 4];
-  var oddRows = [-3, -1, 1, 3, 5];
+  var evenRows = [-2, 0, 2];
+  var oddRows = [-1, 1, 3];
 
   var tileIndex = 0;
 
@@ -423,7 +442,7 @@ if (workGallery) {
       image.className = 'work-item-image';
 
       image.setAttribute('role', 'button');
-      image.setAttribute('tabindex', '0');
+      image.setAttribute('tabindex', tileIndex < works.length ? '0' : '-1');
 
       image.setAttribute(
         'aria-label',
@@ -464,7 +483,7 @@ if (workGallery) {
       tileIndex++;
     });
 
-  }
+  });
 
 
   /* ============================================================
@@ -491,8 +510,6 @@ if (workGallery) {
 
   var velocityX = 0;
   var velocityY = 0;
-
-  var lastDragTime = 0;
 
   var inertiaFrame = null;
 
@@ -808,7 +825,7 @@ if (workGallery) {
         Math.sqrt(
           totalX * totalX +
           totalY * totalY
-        ) > 4
+        ) > 10
       ) {
 
         moved = true;
@@ -863,9 +880,6 @@ if (workGallery) {
 
     dragging = false;
 
-    lastDragTime =
-      performance.now();
-
     if (
       Math.abs(velocityX) > 0.005 ||
       Math.abs(velocityY) > 0.005
@@ -896,6 +910,7 @@ if (workGallery) {
      SMOOTH RENDER LOOP
   ============================================================ */
 
+  var domeVisible = true;
   function animateDome() {
 
     if (!dragging && !inertiaFrame) {
@@ -916,9 +931,7 @@ if (workGallery) {
 
     renderDome();
 
-    requestAnimationFrame(
-      animateDome
-    );
+    if (domeVisible) requestAnimationFrame(animateDome);
 
   }
 
@@ -947,6 +960,8 @@ if (workGallery) {
       'workViewerBackdrop'
     );
 
+  var lastVideoTrigger = null;
+
 
   function openWorkVideo(work) {
 
@@ -972,6 +987,8 @@ if (workGallery) {
 
     document.body.style.overflow =
       'hidden';
+    document.getElementById('workViewerTitle').textContent = work.client + ' — ' + work.title;
+    workViewerClose.focus();
 
   }
 
@@ -991,6 +1008,8 @@ if (workGallery) {
 
     document.body.style.overflow =
       '';
+    document.getElementById('workViewerTitle').textContent = '';
+    if (lastVideoTrigger) lastVideoTrigger.focus();
 
   }
 
@@ -1002,19 +1021,7 @@ if (workGallery) {
         'click',
         function (event) {
 
-          if (moved) {
-            event.preventDefault();
-            return;
-          }
-
-          if (
-            performance.now() -
-            lastDragTime <
-            100
-          ) {
-            return;
-          }
-
+          lastVideoTrigger = data.image;
           openWorkVideo(
             data.work
           );
@@ -1034,6 +1041,7 @@ if (workGallery) {
 
             event.preventDefault();
 
+            lastVideoTrigger = data.image;
             openWorkVideo(
               data.work
             );
@@ -1099,9 +1107,18 @@ if (workGallery) {
 
   renderDome();
 
-  requestAnimationFrame(
-    animateDome
-  );
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      domeVisible = entries[0].isIntersecting;
+      if (domeVisible) requestAnimationFrame(animateDome);
+    }, { threshold: 0.05 }).observe(workGallery);
+  } else { requestAnimationFrame(animateDome); }
+
+  sphereMain.addEventListener('pointerdown', function () {
+    workGallery.classList.add('is-interacted');
+  }, { once: true });
+
+}
 
   /* ============================================================
      CONTACT FORM → POST /api/contact

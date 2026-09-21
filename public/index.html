@@ -8,6 +8,9 @@
 <meta property="og:title" content="Virative — We create what people watch next.">
 <meta property="og:description" content="Influencer marketing and casting for brands, agencies and production houses.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://virative.media/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://virative.media/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -35,8 +38,10 @@
 <header class="nav">
   <div class="nav-in">
     <a href="#top" class="logo">VIRA<b>TIVE</b></a>
-    <nav class="nav-links">
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span><span class="sr-only">Open navigation</span></button>
+    <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
       <a href="#services">Services</a>
+      <a href="#work">Our Work</a>
       <a href="#how">How we work</a>
       <a href="#about">About</a>
       <a href="#contact" class="btn">Let's Work Together</a>
@@ -54,13 +59,13 @@
     <div class="wm-stage">
       <div class="wm-ghost" id="wmGhost" aria-hidden="true"></div>
       <div class="wm-label" id="wmLabel" aria-hidden="true"></div>
-      <h1 class="wm" id="wordmark" aria-label="Virative — viral, creative, innovative"></h1>
+      <h1 class="wm" id="wordmark" aria-label="Virative — viral, creative, innovative">VIRATIVE</h1>
       <span class="wm-meas" id="wmMeas" aria-hidden="true"></span>
     </div>
     <p class="hero-tag reveal in d2">We create what people watch next.</p>
     <div class="hero-cta reveal in d3">
       <a href="#contact" class="btn">Let's Work Together</a>
-      <a href="#services" class="btn btn-ghost">What we do</a>
+      <a href="#work" class="btn btn-ghost">View our work</a>
     </div>
   </div>
   <div class="hero-scroll" aria-hidden="true">Scroll</div>
@@ -160,7 +165,7 @@
     <div class="work-gallery" id="workGallery">
   <div class="sphere-root" id="workSphere">
 
-    <main class="sphere-main" id="workSphereMain">
+    <div class="sphere-main" id="workSphereMain" aria-label="Our Work video gallery">
       <div class="stage">
         <div class="sphere" id="workSphereObject"></div>
       </div>
@@ -171,12 +176,14 @@
       <div class="edge-fade edge-fade--top"></div>
       <div class="edge-fade edge-fade--bottom"></div>
 
-    </main>
+    </div>
 
   </div>
 </div>
 
-<div class="work-viewer" id="workViewer" aria-hidden="true">
+<p class="work-gallery-cue" id="workGalleryCue">Drag to explore <i>·</i> Select a film</p>
+
+<div class="work-viewer" id="workViewer" role="dialog" aria-modal="true" aria-labelledby="workViewerTitle" aria-hidden="true">
   <div class="work-viewer-backdrop" id="workViewerBackdrop"></div>
 
   <button
@@ -189,6 +196,7 @@
   </button>
 
   <div class="work-viewer-frame">
+    <p class="work-viewer-title" id="workViewerTitle"></p>
     <iframe
       id="workViewerFrame"
       src=""
@@ -216,7 +224,7 @@
 <section class="how" id="how">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num" aria-hidden="true">02</span>
+      <span class="sec-num" aria-hidden="true">03</span>
       <p class="eyebrow reveal">Process</p>
       <h2 class="sec-title split">
         <span class="w"><span class="wi">How</span></span>
@@ -236,7 +244,7 @@
 <!-- ABOUT -->
 <section class="about" id="about">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num" aria-hidden="true">03</span><p class="eyebrow reveal">About</p></div>
+    <div class="sec-head"><span class="sec-num" aria-hidden="true">04</span><p class="eyebrow reveal">About</p></div>
     <div class="about-grid">
       <div class="equation reveal d1" aria-label="Viral plus creative plus innovative equals Virative">
         <span class="eq-word">VIRA<i>L</i></span>
@@ -272,6 +280,7 @@
         <span class="w"><span class="wi" style="transition-delay:.14s">together<b>.</b></span></span>
       </h2>
       <p class="contact-note reveal d2">Tell us what you're building. We'll come back with how we'd approach it.</p>
+      <p class="contact-reassurance reveal d3">Your details stay private. We’ll reply within 1–2 business days.</p>
     </div>
     <form class="form reveal d2" id="contactForm" novalidate>
       <div class="field" id="field-name">
@@ -316,6 +325,7 @@
     <p>© <span id="year"></span> Virative. All rights reserved.</p>
     <div class="foot-links">
       <a href="#services">Services</a>
+      <a href="#work">Our Work</a>
       <a href="#how">How we work</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>

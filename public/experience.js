@@ -48,24 +48,6 @@
   function initMotion() {
     var desktop = window.innerWidth > 760;
 
-    // SERVICE CARDS — assemble from fragments (once), then hand back to CSS tilt
-    var cards = gsap.utils.toArray('.svc-card');
-    if (cards.length) {
-      cards.forEach(function (c) { c.classList.remove('reveal', 'rl', 'rr', 'in', 'd1', 'd2'); });
-      gsap.set(cards, { opacity: 0, y: 90, z: -160, rotateX: -28, transformPerspective: 1100, transformOrigin: 'center center' });
-      ScrollTrigger.batch(cards, {
-        start: 'top 90%',
-        once: true,
-        onEnter: function (batch) {
-          gsap.to(batch, {
-            opacity: 1, y: 0, z: 0, rotateX: 0,
-            duration: 1.05, ease: 'power3.out', stagger: 0.09,
-            clearProps: 'transform,opacity'
-          });
-        }
-      });
-    }
-
     // MANIFESTO — pinned exploding typography (desktop only)
     var mwords = gsap.utils.toArray('.manifesto-big .wi');
     if (mwords.length) {
