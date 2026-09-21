@@ -102,7 +102,6 @@
      SCROLL ENGINE — progress, hero parallax, hue-shifting
      background, depth parallax, velocity-reactive marquee skew
   ============================================================ */
-  var progress = document.getElementById('progress');
   var mesh = document.querySelector('.mesh');
   var secNums = Array.prototype.slice.call(document.querySelectorAll('.sec-num'));
   var mqs = Array.prototype.slice.call(document.querySelectorAll('.mq'));
@@ -112,7 +111,6 @@
     window.addEventListener('scroll', function () {
       var y = window.scrollY;
       var h = document.documentElement.scrollHeight - window.innerHeight;
-      if (progress) progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
     }, { passive: true });
   } else {
     var lastY = window.scrollY;
@@ -125,7 +123,6 @@
       var doch = document.documentElement.scrollHeight - vh;
       var prog = doch > 0 ? y / doch : 0;
 
-      if (progress) progress.style.width = (prog * 100) + '%';
 
       // hero drifts up and dissolves
       if (y <= vh) {
@@ -222,67 +219,890 @@ if (!reduceMotion && finePointer) {
 }
 
   /* ============================================================
-     SERVICES — SCROLL STACK
-  ============================================================ */
-  var stackCards = Array.prototype.slice.call(
-    document.querySelectorAll('.scroll-stack-card')
-  );
+   SERVICES — SCROLL STACK
+============================================================ */
+var stackCards = Array.prototype.slice.call(
+  document.querySelectorAll('.scroll-stack-card')
+);
 
-  if (!reduceMotion && stackCards.length) {
-    function updateScrollStack() {
-      var stackTop = window.innerHeight * 0.2;
+if (!reduceMotion && stackCards.length) {
+  var stackScaleStep = 0.07;
+  var stackBlur = 4;
+  var stackDim = 0.28;
+  var stackPeek = 26;
 
-      for (var i = 0; i < stackCards.length; i++) {
-        var card = stackCards[i];
-        var next = stackCards[i + 1];
+  function updateScrollStack() {
+    var viewport = window.innerHeight;
 
-        card.style.zIndex = String(i + 1);
+    for (var i = 0; i < stackCards.length; i++) {
+      var card = stackCards[i];
+      var rect = card.getBoundingClientRect();
 
-        var content = card.querySelectorAll(
-          '.svc-index, .svc-card-title, .svc-body'
-        );
+      card.style.zIndex = String(i + 1);
 
-        if (!next) {
-          card.style.transform = 'scale(1)';
-          card.style.filter = 'blur(0px)';
+      var progress = clamp(
+        (viewport * 0.12 - rect.top) / (viewport * 0.68),
+        0,
+        1
+      );
 
-          for (var c = 0; c < content.length; c++) {
-            content[c].style.opacity = '1';
-          }
+      var scale = 1 - (progress * stackScaleStep);
+      var y = progress * -stackPeek;
+      var blur = progress * stackBlur;
+      var opacity = 1 - (progress * stackDim);
 
-          continue;
-        }
+      card.style.transform =
+        'translate3d(0,' +
+        y.toFixed(2) +
+        'px,0) scale(' +
+        scale.toFixed(4) +
+        ')';
 
-        var nextRect = next.getBoundingClientRect();
-        var cardHeight = card.getBoundingClientRect().height;
+      card.style.filter =
+        'blur(' + blur.toFixed(2) + 'px)';
 
-        var progress = clamp(
-          (stackTop + cardHeight - nextRect.top) / cardHeight,
-          0,
-          1
-        );
-
-        var scale = 1 - (progress * 0.08);
-        var y = progress * -10;
-        var blur = progress * 0.8;
-        var contentOpacity = 1 - progress;
-
-        card.style.transform =
-          'translateY(' + y.toFixed(2) + 'px) scale(' + scale.toFixed(4) + ')';
-
-        card.style.filter = 'blur(' + blur.toFixed(2) + 'px)';
-
-        for (var j = 0; j < content.length; j++) {
-          content[j].style.opacity = contentOpacity.toFixed(3);
-        }
-      }
-
-      requestAnimationFrame(updateScrollStack);
+      card.style.opacity = opacity.toFixed(3);
     }
 
-    requestAnimationFrame(updateScrollStack);
   }
-  
+
+  var stackTicking = false;
+  function requestStackUpdate() {
+    if (stackTicking) return;
+    stackTicking = true;
+    requestAnimationFrame(function () {
+      updateScrollStack();
+      stackTicking = false;
+    });
+  }
+
+  window.addEventListener('scroll', requestStackUpdate, { passive: true });
+  window.addEventListener('resize', requestStackUpdate);
+  requestStackUpdate();
+}
+
+/* ============================================================
+   OUR WORK — DOME GALLERY
+============================================================ */
+
+var workGallery = document.getElementById('workGallery');
+
+if (workGallery) {
+
+  var works = [
+    {
+      vimeoId: '1214488863',
+      client: '0521',
+      title: 'Visual Story'
+    },
+    {
+      vimeoId: '1187414620',
+      client: 'Cocktail',
+      title: 'Crafted Moments'
+    },
+    {
+      vimeoId: '1187413039',
+      client: 'Ritz-Carlton Abu Dhabi',
+      title: 'Luxury in Motion'
+    },
+    {
+      vimeoId: '1187406957',
+      client: 'ElCarmelo',
+      title: 'Brand Film'
+    },
+    {
+      vimeoId: '1187213379',
+      client: 'Stairs',
+      title: 'Architectural Motion'
+    },
+    {
+      vimeoId: '1187211955',
+      client: 'Loui',
+      title: 'Social Content'
+    },
+    {
+      vimeoId: '1157497781',
+      client: 'ElCarmelo',
+      title: 'Process Film'
+    },
+    {
+      vimeoId: '1157164326',
+      client: 'HUAWEI GT 6 Pro',
+      title: 'Campaign Film'
+    },
+    {
+      vimeoId: '1157161427',
+      client: 'HUAWEI GT 6 Pro',
+      title: 'Product Story'
+    },
+    {
+      vimeoId: '1157160339',
+      client: 'OneFitout',
+      title: 'Interior in Motion'
+    },
+    {
+      vimeoId: '1093599047',
+      client: 'Yango',
+      title: 'Urban Motion'
+    },
+    {
+      vimeoId: '1157152963',
+      client: 'OneFitout',
+      title: 'Space & Detail'
+    },
+    {
+      vimeoId: '1157154617',
+      client: 'OneFitout',
+      title: 'Behind the Scenes'
+    },
+    {
+      vimeoId: '1157165866',
+      client: 'HUAWEI GT 6 Pro',
+      title: 'Campaign Story'
+    },
+    {
+      vimeoId: '1043610808',
+      client: 'Dubai',
+      title: 'From Above'
+    }
+  ];
+
+  var sphere = document.getElementById('workSphereObject');
+  var sphereMain = document.getElementById('workSphereMain');
+
+  var workItems = [];
+
+  /*
+   * React Bits uses:
+   * 35 columns × 5 rows
+   *
+   * We reproduce the same structure here.
+   * Your 15 videos are repeated across the available tiles.
+   */
+
+  var segments = 35;
+
+  var xColumns = [];
+
+  for (var c = 0; c < segments; c++) {
+    xColumns.push(-37 + (c * 2));
+  });
+
+  var evenRows = [-4, -2, 0, 2, 4];
+  var oddRows = [-3, -1, 1, 3, 5];
+
+  var tileIndex = 0;
+
+  xColumns.forEach(function (x, columnIndex) {
+
+    var rows =
+      columnIndex % 2 === 0
+        ? evenRows
+        : oddRows;
+
+    rows.forEach(function (y) {
+
+      var work = works[tileIndex % works.length];
+
+      var item = document.createElement('div');
+
+      item.className = 'work-item';
+
+      item.dataset.src =
+        'https://vumbnail.com/' +
+        work.vimeoId +
+        '.jpg';
+
+      item.dataset.offsetX = x;
+      item.dataset.offsetY = y;
+      item.dataset.sizeX = 2;
+      item.dataset.sizeY = 2;
+
+      var image = document.createElement('div');
+
+      image.className = 'work-item-image';
+
+      image.setAttribute('role', 'button');
+      image.setAttribute('tabindex', '0');
+
+      image.setAttribute(
+        'aria-label',
+        'Open ' + work.client + ' — ' + work.title
+      );
+
+      image.innerHTML =
+        '<img src="https://vumbnail.com/' +
+        work.vimeoId +
+        '.jpg" alt="' +
+        work.client +
+        ' — ' +
+        work.title +
+        '" draggable="false">' +
+
+        '<div class="work-item-label">' +
+
+          '<span class="work-item-client">' +
+            work.client +
+          '</span>' +
+
+          '<span class="work-item-title">' +
+            work.title +
+          '</span>' +
+
+        '</div>';
+
+      item.appendChild(image);
+
+      sphere.appendChild(item);
+
+      workItems.push({
+        element: item,
+        image: image,
+        work: work
+      });
+
+      tileIndex++;
+    });
+
+  }
+
+
+  /* ============================================================
+     DOME GEOMETRY
+  ============================================================ */
+
+  var rotationX = 0;
+  var rotationY = 0;
+
+  var targetRotationX = 0;
+  var targetRotationY = 0;
+
+  var startRotationX = 0;
+  var startRotationY = 0;
+
+  var dragging = false;
+  var moved = false;
+
+  var startPointerX = 0;
+  var startPointerY = 0;
+
+  var lastPointerX = 0;
+  var lastPointerY = 0;
+
+  var velocityX = 0;
+  var velocityY = 0;
+
+  var lastDragTime = 0;
+
+  var inertiaFrame = null;
+
+  var maxVerticalRotation = 5;
+  var dragSensitivity = 20;
+
+
+  function clampAngle(value, min, max) {
+    return Math.min(
+      Math.max(value, min),
+      max
+    );
+  }
+
+
+  function wrapAngle(value) {
+    return ((value + 180) % 360 + 360) % 360 - 180;
+  }
+
+
+  function getRadius() {
+
+    var rect =
+      workGallery.getBoundingClientRect();
+
+    var width = Math.max(1, rect.width);
+    var height = Math.max(1, rect.height);
+
+    var minDimension =
+      Math.min(width, height);
+
+    var radius =
+      minDimension * 0.5;
+
+    var heightGuard =
+      height * 1.35;
+
+    radius =
+      Math.min(radius, heightGuard);
+
+    radius =
+      Math.max(radius, 600);
+
+    return radius;
+  }
+
+
+  function updateRadius() {
+
+    var radius = getRadius();
+
+    sphere.style.setProperty(
+      '--radius',
+      Math.round(radius) + 'px'
+    );
+
+  }
+
+
+  function renderDome() {
+
+    var radius =
+      parseFloat(
+        getComputedStyle(
+          sphere
+        ).getPropertyValue('--radius')
+      ) || 600;
+
+    var circumference =
+      radius * 3.14;
+
+    var itemWidth =
+      circumference / segments;
+
+    var itemHeight =
+      circumference / segments;
+
+    sphere.style.transform =
+      'translateZ(' +
+      (-radius).toFixed(2) +
+      'px) ' +
+      'rotateX(' +
+      rotationX.toFixed(3) +
+      'deg) ' +
+      'rotateY(' +
+      rotationY.toFixed(3) +
+      'deg)';
+
+
+    for (
+      var i = 0;
+      i < workItems.length;
+      i++
+    ) {
+
+      var data =
+        workItems[i];
+
+      var item =
+        data.element;
+
+      var offsetX =
+        parseFloat(item.dataset.offsetX);
+
+      var offsetY =
+        parseFloat(item.dataset.offsetY);
+
+      var sizeX = 2;
+      var sizeY = 2;
+
+      var unit =
+        360 / segments / 2;
+
+      var baseRotateY =
+        unit *
+        (
+          offsetX +
+          ((sizeX - 1) / 2)
+        );
+
+      var baseRotateX =
+        unit *
+        (
+          offsetY -
+          ((sizeY - 1) / 2)
+        );
+
+      item.style.width =
+        (itemWidth * sizeX) + 'px';
+
+      item.style.height =
+        (itemHeight * sizeY) + 'px';
+
+      item.style.transform =
+        'rotateY(' +
+        baseRotateY.toFixed(3) +
+        'deg) ' +
+
+        'rotateX(' +
+        baseRotateX.toFixed(3) +
+        'deg) ' +
+
+        'translateZ(' +
+        radius.toFixed(2) +
+        'px)';
+
+    }
+
+  }
+
+
+  /* ============================================================
+     DRAGGING
+  ============================================================ */
+
+  function stopInertia() {
+
+    if (inertiaFrame) {
+
+      cancelAnimationFrame(
+        inertiaFrame
+      );
+
+      inertiaFrame = null;
+
+    }
+
+  }
+
+
+  function startInertia(
+    velocityXStart,
+    velocityYStart
+  ) {
+
+    stopInertia();
+
+    var vx =
+      clampAngle(
+        velocityXStart,
+        -1.4,
+        1.4
+      ) * 80;
+
+    var vy =
+      clampAngle(
+        velocityYStart,
+        -1.4,
+        1.4
+      ) * 80;
+
+
+    function step() {
+
+      vx *= 0.965;
+      vy *= 0.965;
+
+      if (
+        Math.abs(vx) < 0.015 &&
+        Math.abs(vy) < 0.015
+      ) {
+
+        inertiaFrame = null;
+        return;
+
+      }
+
+
+      rotationX =
+        clampAngle(
+          rotationX - vy / 200,
+          -maxVerticalRotation,
+          maxVerticalRotation
+        );
+
+      rotationY =
+        wrapAngle(
+          rotationY + vx / 200
+        );
+
+
+      targetRotationX =
+        rotationX;
+
+      targetRotationY =
+        rotationY;
+
+
+      inertiaFrame =
+        requestAnimationFrame(
+          step
+        );
+
+    }
+
+
+    inertiaFrame =
+      requestAnimationFrame(
+        step
+      );
+
+  }
+
+
+  sphereMain.addEventListener(
+    'pointerdown',
+    function (event) {
+
+      if (workViewer.classList.contains('is-open')) {
+        return;
+      }
+
+      stopInertia();
+
+      dragging = true;
+      moved = false;
+
+      startPointerX =
+        event.clientX;
+
+      startPointerY =
+        event.clientY;
+
+      lastPointerX =
+        event.clientX;
+
+      lastPointerY =
+        event.clientY;
+
+      startRotationX =
+        rotationX;
+
+      startRotationY =
+        rotationY;
+
+      velocityX = 0;
+      velocityY = 0;
+
+      sphereMain.setPointerCapture(
+        event.pointerId
+      );
+
+    }
+  );
+
+
+  sphereMain.addEventListener(
+    'pointermove',
+    function (event) {
+
+      if (!dragging) {
+        return;
+      }
+
+      var dx =
+        event.clientX -
+        lastPointerX;
+
+      var dy =
+        event.clientY -
+        lastPointerY;
+
+      var totalX =
+        event.clientX -
+        startPointerX;
+
+      var totalY =
+        event.clientY -
+        startPointerY;
+
+
+      if (
+        Math.sqrt(
+          totalX * totalX +
+          totalY * totalY
+        ) > 4
+      ) {
+
+        moved = true;
+
+      }
+
+
+      lastPointerX =
+        event.clientX;
+
+      lastPointerY =
+        event.clientY;
+
+
+      targetRotationY =
+        wrapAngle(
+          startRotationY +
+          totalX / dragSensitivity
+        );
+
+      targetRotationX =
+        clampAngle(
+          startRotationX -
+          totalY / dragSensitivity,
+          -maxVerticalRotation,
+          maxVerticalRotation
+        );
+
+
+      rotationY =
+        targetRotationY;
+
+      rotationX =
+        targetRotationX;
+
+
+      velocityX =
+        dx / dragSensitivity;
+
+      velocityY =
+        dy / dragSensitivity;
+
+    }
+  );
+
+
+  function finishDrag() {
+
+    if (!dragging) {
+      return;
+    }
+
+    dragging = false;
+
+    lastDragTime =
+      performance.now();
+
+    if (
+      Math.abs(velocityX) > 0.005 ||
+      Math.abs(velocityY) > 0.005
+    ) {
+
+      startInertia(
+        velocityX,
+        velocityY
+      );
+
+    }
+
+  }
+
+
+  sphereMain.addEventListener(
+    'pointerup',
+    finishDrag
+  );
+
+  sphereMain.addEventListener(
+    'pointercancel',
+    finishDrag
+  );
+
+
+  /* ============================================================
+     SMOOTH RENDER LOOP
+  ============================================================ */
+
+  function animateDome() {
+
+    if (!dragging && !inertiaFrame) {
+
+      rotationX +=
+        (
+          targetRotationX -
+          rotationX
+        ) * 0.08;
+
+      rotationY +=
+        (
+          targetRotationY -
+          rotationY
+        ) * 0.08;
+
+    }
+
+    renderDome();
+
+    requestAnimationFrame(
+      animateDome
+    );
+
+  }
+
+
+  /* ============================================================
+     VIMEO VIEWER
+  ============================================================ */
+
+  var workViewer =
+    document.getElementById(
+      'workViewer'
+    );
+
+  var workViewerFrame =
+    document.getElementById(
+      'workViewerFrame'
+    );
+
+  var workViewerClose =
+    document.getElementById(
+      'workViewerClose'
+    );
+
+  var workViewerBackdrop =
+    document.getElementById(
+      'workViewerBackdrop'
+    );
+
+
+  function openWorkVideo(work) {
+
+    if (!workViewer) {
+      return;
+    }
+
+    stopInertia();
+
+    workViewerFrame.src =
+      'https://player.vimeo.com/video/' +
+      work.vimeoId +
+      '?autoplay=1&title=0&byline=0&portrait=0';
+
+    workViewer.classList.add(
+      'is-open'
+    );
+
+    workViewer.setAttribute(
+      'aria-hidden',
+      'false'
+    );
+
+    document.body.style.overflow =
+      'hidden';
+
+  }
+
+
+  function closeWorkVideo() {
+
+    workViewer.classList.remove(
+      'is-open'
+    );
+
+    workViewer.setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    workViewerFrame.src = '';
+
+    document.body.style.overflow =
+      '';
+
+  }
+
+
+  workItems.forEach(
+    function (data) {
+
+      data.image.addEventListener(
+        'click',
+        function (event) {
+
+          if (moved) {
+            event.preventDefault();
+            return;
+          }
+
+          if (
+            performance.now() -
+            lastDragTime <
+            100
+          ) {
+            return;
+          }
+
+          openWorkVideo(
+            data.work
+          );
+
+        }
+      );
+
+
+      data.image.addEventListener(
+        'keydown',
+        function (event) {
+
+          if (
+            event.key === 'Enter' ||
+            event.key === ' '
+          ) {
+
+            event.preventDefault();
+
+            openWorkVideo(
+              data.work
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  workViewerClose.addEventListener(
+    'click',
+    closeWorkVideo
+  );
+
+  workViewerBackdrop.addEventListener(
+    'click',
+    closeWorkVideo
+  );
+
+
+  document.addEventListener(
+    'keydown',
+    function (event) {
+
+      if (
+        event.key === 'Escape' &&
+        workViewer.classList.contains(
+          'is-open'
+        )
+      ) {
+
+        closeWorkVideo();
+
+      }
+
+    }
+  );
+
+
+  /* ============================================================
+     RESIZE
+  ============================================================ */
+
+  window.addEventListener(
+    'resize',
+    function () {
+
+      updateRadius();
+
+    }
+  );
+
+
+  /* ============================================================
+     INITIALIZE
+  ============================================================ */
+
+  updateRadius();
+
+  renderDome();
+
+  requestAnimationFrame(
+    animateDome
+  );
+
   /* ============================================================
      CONTACT FORM → POST /api/contact
   ============================================================ */

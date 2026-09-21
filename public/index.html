@@ -28,7 +28,6 @@
 <!-- HUD + progress + cursor -->
 <span class="hud tl" aria-hidden="true"></span><span class="hud tr" aria-hidden="true"></span>
 <span class="hud bl" aria-hidden="true"></span><span class="hud br" aria-hidden="true"></span>
-<div class="progress" id="progress" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
@@ -140,6 +139,66 @@
 
   </div>
 </div>
+  </div>
+</section>
+
+<!-- OUR WORK -->
+<section class="work" id="work">
+  <div class="wrap">
+
+    <div class="sec-head">
+      <span class="sec-num" aria-hidden="true">02</span>
+      <p class="eyebrow reveal">Our Work</p>
+
+      <h2 class="sec-title split">
+        <span class="w"><span class="wi">What</span></span>
+        <span class="w"><span class="wi" style="transition-delay:.07s">we</span></span>
+        <span class="w"><span class="wi" style="transition-delay:.14s">create</span></span>
+      </h2>
+    </div>
+
+    <div class="work-gallery" id="workGallery">
+  <div class="sphere-root" id="workSphere">
+
+    <main class="sphere-main" id="workSphereMain">
+      <div class="stage">
+        <div class="sphere" id="workSphereObject"></div>
+      </div>
+
+      <div class="overlay"></div>
+      <div class="overlay overlay--blur"></div>
+
+      <div class="edge-fade edge-fade--top"></div>
+      <div class="edge-fade edge-fade--bottom"></div>
+
+    </main>
+
+  </div>
+</div>
+
+<div class="work-viewer" id="workViewer" aria-hidden="true">
+  <div class="work-viewer-backdrop" id="workViewerBackdrop"></div>
+
+  <button
+    class="work-viewer-close"
+    id="workViewerClose"
+    type="button"
+    aria-label="Close video"
+  >
+    ×
+  </button>
+
+  <div class="work-viewer-frame">
+    <iframe
+      id="workViewerFrame"
+      src=""
+      title="Virative — Our Work"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+
   </div>
 </section>
 
