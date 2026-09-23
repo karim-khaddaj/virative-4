@@ -163,7 +163,7 @@
   function openWorkVideo(work, trigger) {
     lastVideoTrigger = trigger;
     viewerFrame.src = 'https://player.vimeo.com/video/' + work.vimeoId + '?autoplay=1&title=0&byline=0&portrait=0';
-    viewerTitle.textContent = work.client + ' — ' + work.title;
+    viewerTitle.textContent = work.client + ': ' + work.title;
     viewer.classList.add('is-open'); viewer.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; viewerClose.focus();
   }
   function closeWorkVideo() {
@@ -174,8 +174,8 @@
     works.forEach(function (work, index) {
       var project = document.createElement('article'), button = document.createElement('button');
       project.className = 'work-project'; button.className = 'work-project-button'; button.type = 'button';
-      button.setAttribute('aria-label', 'Open ' + work.client + ' — ' + work.title);
-      button.innerHTML = '<span class="work-project-media"><img src="https://vumbnail.com/' + work.vimeoId + '.jpg" alt="' + work.client + ' — ' + work.title + '" loading="lazy"></span><span class="work-project-meta"><span class="work-project-number">' + String(index + 1).padStart(2, '0') + '</span><span class="work-project-client">' + work.client + '</span><span class="work-project-link">View film ↗</span><span class="work-project-title">' + work.title + '</span></span>';
+      button.setAttribute('aria-label', 'Open ' + work.client + ': ' + work.title);
+      button.innerHTML = '<span class="work-project-media"><img src="https://vumbnail.com/' + work.vimeoId + '.jpg" alt="' + work.client + ': ' + work.title + '" loading="lazy"></span><span class="work-project-meta"><span class="work-project-number">' + String(index + 1).padStart(2, '0') + '</span><span class="work-project-client">' + work.client + '</span><span class="work-project-link">View film ↗</span><span class="work-project-title">' + work.title + '</span></span>';
       button.addEventListener('click', function () { openWorkVideo(work, button); });
       project.appendChild(button); gallery.appendChild(project);
     });
@@ -199,8 +199,8 @@
       submit.disabled = true; var originalLabel = submit.textContent; submit.textContent = 'Sending…';
       fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         .then(function (response) { return response.json().then(function (data) { return { response: response, data: data }; }); })
-        .then(function (result) { if (result.response.ok && result.data.ok) { form.reset(); setStatus("Thanks — your message is in. We'll be in touch.", 'ok'); } else if (result.data && result.data.errors) { showErrors(result.data.errors); setStatus('Please check the highlighted fields.', 'bad'); } else setStatus((result.data && result.data.error) || 'Something went wrong. Please try again.', 'bad'); })
-        .catch(function () { setStatus('Network error — please try again, or email us directly.', 'bad'); })
+        .then(function (result) { if (result.response.ok && result.data.ok) { form.reset(); setStatus("Thanks. Your message is in. We'll be in touch.", 'ok'); } else if (result.data && result.data.errors) { showErrors(result.data.errors); setStatus('Please check the highlighted fields.', 'bad'); } else setStatus((result.data && result.data.error) || 'Something went wrong. Please try again.', 'bad'); })
+        .catch(function () { setStatus('Network error. Please try again, or email us directly.', 'bad'); })
         .finally(function () { submit.disabled = false; submit.textContent = originalLabel; });
     });
   }
