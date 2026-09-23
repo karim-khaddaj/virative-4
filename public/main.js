@@ -6,20 +6,6 @@
   var all = function (selector) { return Array.prototype.slice.call(document.querySelectorAll(selector)); };
   byId('year').textContent = new Date().getFullYear();
 
-  var intro = byId('intro');
-  function liftIntro() { if (intro) intro.classList.add('gone'); }
-  var introSeen = false;
-  try { introSeen = sessionStorage.getItem('virative-intro-seen') === '1'; } catch (error) {}
-  if (reduceMotion || introSeen) liftIntro();
-  else {
-    window.addEventListener('load', function () { setTimeout(liftIntro, 1150); });
-    setTimeout(liftIntro, 2600);
-    window.addEventListener('pointerdown', liftIntro, { once: true });
-    function skipIntro(event) { if (event.key === 'Escape') { liftIntro(); window.removeEventListener('keydown', skipIntro); } }
-    window.addEventListener('keydown', skipIntro);
-    try { sessionStorage.setItem('virative-intro-seen', '1'); } catch (error) {}
-  }
-
   var brand = 'VIRATIVE';
   var phases = [
     { word: null, hold: 3000 },
@@ -73,7 +59,7 @@
       size = Math.max(36, Math.min(size, Math.min(176, window.innerHeight * 0.27)));
       document.documentElement.style.setProperty('--wm-size', size.toFixed(1) + 'px');
     }
-    function startWordmark() { fitWordmark(); if (!reduceMotion) setTimeout(nextPhase, 2400); }
+    function startWordmark() { fitWordmark(); if (!reduceMotion) { if (document.documentElement.classList.contains('bi-running')) window.addEventListener('virative:intro-end', function () { setTimeout(nextPhase, 2400); }, { once: true }); else setTimeout(nextPhase, 2400); } }
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(startWordmark); else window.addEventListener('load', startWordmark);
     var resizeTimer;
     window.addEventListener('resize', function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(fitWordmark, 120); });
