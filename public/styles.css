@@ -324,13 +324,23 @@ html.lenis,html.lenis body{height:auto;}
 }
 .work-project{grid-column:span 5;min-width:0;}.work-project:nth-child(3n+1){grid-column:span 7;}.work-project:nth-child(5n){grid-column:span 6;margin-top:5rem;}
 .work-project-button{display:block;width:100%;padding:0;background:transparent;border:0;color:inherit;text-align:left;}
-.work-project-media{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0a0c0f;border:1px solid var(--line);}
+.work-project-media{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:#0a0c0f;border:1px solid var(--line);}
 .work-project:nth-child(3n+1) .work-project-media{aspect-ratio:16/9;}.work-project-media img{width:100%;height:100%;display:block;object-fit:cover;filter:grayscale(.85) saturate(.7);transition:transform .65s var(--ease-out),filter .5s ease;}
 .work-project-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(5,6,8,.45));opacity:.5;transition:opacity .4s;}
 .work-project-button:hover .work-project-media img,.work-project-button:focus-visible .work-project-media img{filter:grayscale(0) saturate(1);transform:scale(1.035);}.work-project-button:hover .work-project-media::after{opacity:.1;}
 .work-project-meta{display:grid;grid-template-columns:3rem minmax(0,1fr) auto;gap:.8rem;margin-top:1rem;align-items:baseline;}.work-project-number,.work-project-client{font-family:'IBM Plex Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;}.work-project-number{color:var(--green);}.work-project-client{color:var(--mute);}.work-project-title{grid-column:2;font-size:clamp(1.25rem,2vw,2rem);font-weight:700;line-height:1.05;color:var(--bright);}.work-project-link{grid-column:3;grid-row:1/3;font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--green);opacity:0;transition:opacity .3s;}.work-project-button:hover .work-project-link,.work-project-button:focus-visible .work-project-link{opacity:1;}
 @media(max-width:700px){.work-gallery{display:block;margin-top:2.5rem}.work-project,.work-project:nth-child(3n+1),.work-project:nth-child(5n){margin:0 0 2.5rem;}.work-project-media,.work-project:nth-child(3n+1) .work-project-media{display:block;width:100%;aspect-ratio:16/10}.work-project-meta{grid-template-columns:2.5rem minmax(0,1fr)}.work-project-link{display:none}.work-project-title{font-size:1.35rem}}
 
+
+/* Selected Work expansion. Existing card grid and hover styling stay shared. */
+.work-context{margin-top:1.5rem;max-width:48ch;font-size:.92rem;color:var(--mute);}
+.work-project-meta .work-project-title{grid-row:1;overflow-wrap:anywhere;}
+.work-more-control{display:flex;justify-content:center;margin-top:3rem;}
+.work-more-toggle{background:transparent;border:0;border-bottom:1px solid var(--line-strong);padding:1rem .25rem;color:var(--green);font-family:'IBM Plex Mono',monospace;font-size:.74rem;letter-spacing:.18em;min-height:48px;transition:border-color .25s,color .25s;}
+.work-more-toggle:hover{border-color:var(--green);color:var(--bright);}
+.work-more[hidden]{display:none;}
+.work-more.is-changing{overflow:hidden;}
+.work-more .work-gallery{padding-bottom:1px;}
 
 /* ---------- work video viewer ---------- */
 

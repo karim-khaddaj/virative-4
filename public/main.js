@@ -129,41 +129,92 @@
   });
 
   var works = [
-    { vimeoId: '1214488863', client: '0521', title: 'Visual Story' },
-    { vimeoId: '1187414620', client: 'Cocktail', title: 'Crafted Moments' },
-    { vimeoId: '1187413039', client: 'Ritz-Carlton Abu Dhabi', title: 'Luxury in Motion' },
-    { vimeoId: '1187406957', client: 'ElCarmelo', title: 'Brand Film' },
-    { vimeoId: '1187213379', client: 'Stairs', title: 'Architectural Motion' },
-    { vimeoId: '1187211955', client: 'Loui', title: 'Social Content' },
-    { vimeoId: '1157497781', client: 'ElCarmelo', title: 'Process Film' },
-    { vimeoId: '1157164326', client: 'HUAWEI GT 6 Pro', title: 'Campaign Film' },
-    { vimeoId: '1157161427', client: 'HUAWEI GT 6 Pro', title: 'Product Story' },
-    { vimeoId: '1157160339', client: 'OneFitout', title: 'Interior in Motion' },
-    { vimeoId: '1093599047', client: 'Yango', title: 'Urban Motion' },
-    { vimeoId: '1157152963', client: 'OneFitout', title: 'Space & Detail' },
-    { vimeoId: '1157154617', client: 'OneFitout', title: 'Behind the Scenes' },
-    { vimeoId: '1157165866', client: 'HUAWEI GT 6 Pro', title: 'Campaign Story' },
-    { vimeoId: '1043610808', client: 'Dubai', title: 'From Above' }
+    { vimeoId: '1229898077', title: 'HUAWEI' },
+    { vimeoId: '1229876917', title: 'JETOUR' },
+    { vimeoId: '1229886775', title: 'ROX - Arman Tsarukyan' },
+    { vimeoId: '1229878637', title: 'SHEIN' },
+    { vimeoId: '1229898073', title: 'YANGO' },
+    { vimeoId: '1229878691', title: 'COCO DUBAI' },
+    { vimeoId: '1229898128', title: 'ELCARMELO' },
+    { vimeoId: '1229878638', title: 'GWM' },
+    { vimeoId: '1229898076', title: 'HUAWEI' },
+    { vimeoId: '1229898078', title: 'HUAWEI x DUBAI FITNESS CHALLENGE' },
+    { vimeoId: '1229875756', title: 'JETOUR' },
+    { vimeoId: '1229878328', title: 'MG' },
+    { vimeoId: '1229878329', title: 'MG' },
+    { vimeoId: '1229872820', title: 'ROX' },
+    { vimeoId: '1229876915', title: 'ROX' },
+    { vimeoId: '1229878639', title: 'SHEIN' },
+    { vimeoId: '1229878640', title: 'SHEIN' },
+    { vimeoId: '1229898147', title: 'Social Content' },
+    { vimeoId: '1229878689', title: 'THE CRAFT' },
+    { vimeoId: '1229876916', title: 'JETOUR' }
   ];
   var gallery = byId('workGallery'), viewer = byId('workViewer'), viewerFrame = byId('workViewerFrame'), viewerClose = byId('workViewerClose'), viewerBackdrop = byId('workViewerBackdrop'), viewerTitle = byId('workViewerTitle'), lastVideoTrigger = null;
   function openWorkVideo(work, trigger) {
     lastVideoTrigger = trigger;
     viewerFrame.src = 'https://player.vimeo.com/video/' + work.vimeoId + '?autoplay=1&title=0&byline=0&portrait=0';
-    viewerTitle.textContent = work.client + ': ' + work.title;
+    viewerTitle.textContent = work.title;
+    viewerFrame.title = work.title;
     viewer.classList.add('is-open'); viewer.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; viewerClose.focus();
   }
   function closeWorkVideo() {
-    viewer.classList.remove('is-open'); viewer.setAttribute('aria-hidden', 'true'); viewerFrame.src = ''; viewerTitle.textContent = ''; document.body.style.overflow = '';
+    viewer.classList.remove('is-open'); viewer.setAttribute('aria-hidden', 'true'); viewerFrame.removeAttribute('src'); viewerTitle.textContent = ''; document.body.style.overflow = '';
     if (lastVideoTrigger) lastVideoTrigger.focus();
   }
   if (gallery && viewer && viewerFrame && viewerClose && viewerBackdrop && viewerTitle) {
+    // Keep the existing fixed viewer above section and navigation stacking contexts.
+    document.body.appendChild(viewer);
+    var moreGallery = byId('workMoreGallery'), morePanel = byId('workMore'), moreToggle = byId('workMoreToggle');
+    var moreOpen = false, moreAnimation = null;
     works.forEach(function (work, index) {
       var project = document.createElement('article'), button = document.createElement('button');
       project.className = 'work-project'; button.className = 'work-project-button'; button.type = 'button';
-      button.setAttribute('aria-label', 'Open ' + work.client + ': ' + work.title);
-      button.innerHTML = '<span class="work-project-media"><img src="https://vumbnail.com/' + work.vimeoId + '.jpg" alt="' + work.client + ': ' + work.title + '" loading="lazy"></span><span class="work-project-meta"><span class="work-project-number">' + String(index + 1).padStart(2, '0') + '</span><span class="work-project-client">' + work.client + '</span><span class="work-project-link">View film ↗</span><span class="work-project-title">' + work.title + '</span></span>';
+      button.dataset.vimeoId = work.vimeoId;
+      button.setAttribute('aria-label', 'Open ' + work.title);
+      var media = document.createElement('span'), image = document.createElement('img');
+      media.className = 'work-project-media'; image.alt = work.title;
+      image.loading = 'lazy'; image.decoding = 'async';
+      var thumbnail = '/work-thumbnails/' + work.vimeoId + '.webp';
+      if (index < 5) image.src = thumbnail;
+      else image.dataset.src = thumbnail;
+      media.appendChild(image);
+      var meta = document.createElement('span'), number = document.createElement('span'), title = document.createElement('span'), link = document.createElement('span');
+      meta.className = 'work-project-meta'; number.className = 'work-project-number'; title.className = 'work-project-title'; link.className = 'work-project-link';
+      number.textContent = String(index + 1).padStart(2, '0'); title.textContent = work.title; link.textContent = 'View film ↗';
+      meta.appendChild(number); meta.appendChild(title); meta.appendChild(link);
+      button.appendChild(media); button.appendChild(meta);
       button.addEventListener('click', function () { openWorkVideo(work, button); });
-      project.appendChild(button); gallery.appendChild(project);
+      project.appendChild(button); (index < 5 ? gallery : moreGallery).appendChild(project);
+    });
+    function refreshWorkLayout() {
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+      window.dispatchEvent(new Event('resize'));
+    }
+    moreToggle.addEventListener('click', function () {
+      var startHeight = morePanel.hidden ? 0 : morePanel.getBoundingClientRect().height;
+      if (moreAnimation) { moreAnimation.cancel(); moreAnimation = null; }
+      moreOpen = !moreOpen;
+      moreToggle.setAttribute('aria-expanded', String(moreOpen));
+      moreToggle.textContent = moreOpen ? 'SHOW LESS ↑' : 'VIEW MORE WORK ↓';
+      morePanel.hidden = false;
+      morePanel.inert = !moreOpen;
+      if (moreOpen) {
+        moreGallery.querySelectorAll('img[data-src]').forEach(function (image) {
+          image.src = image.dataset.src; image.removeAttribute('data-src');
+        });
+      }
+      var endHeight = moreOpen ? morePanel.scrollHeight : 0;
+      function settled() {
+        morePanel.hidden = !moreOpen;
+        morePanel.classList.remove('is-changing');
+        moreAnimation = null;
+        refreshWorkLayout();
+      }
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !morePanel.animate) { settled(); return; }
+      morePanel.classList.add('is-changing');
+      moreAnimation = morePanel.animate([{ height: startHeight + 'px', opacity: moreOpen ? .25 : 1 }, { height: endHeight + 'px', opacity: moreOpen ? 1 : 0 }], { duration: 520, easing: 'cubic-bezier(.16,1,.3,1)' });
+      moreAnimation.onfinish = settled;
     });
     viewerClose.addEventListener('click', closeWorkVideo);
     viewerBackdrop.addEventListener('click', closeWorkVideo);

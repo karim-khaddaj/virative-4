@@ -162,7 +162,14 @@
       </h2>
     </div>
 
-    <div class="work-gallery" id="workGallery" aria-label="Our Work video gallery"></div>
+    <p class="work-context">Selected work created with our production network.</p>
+    <div class="work-gallery" id="workGallery" aria-label="Featured work"></div>
+    <div class="work-more-control">
+      <button class="work-more-toggle" id="workMoreToggle" type="button" aria-expanded="false" aria-controls="workMore">VIEW MORE WORK ↓</button>
+    </div>
+    <div class="work-more" id="workMore" hidden inert>
+      <div class="work-gallery" id="workMoreGallery" aria-label="More work"></div>
+    </div>
 
 <div class="work-viewer" id="workViewer" role="dialog" aria-modal="true" aria-labelledby="workViewerTitle" aria-hidden="true">
   <div class="work-viewer-backdrop" id="workViewerBackdrop"></div>
@@ -180,7 +187,6 @@
     <p class="work-viewer-title" id="workViewerTitle"></p>
     <iframe
       id="workViewerFrame"
-      src=""
       title="Virative: Our Work"
       allow="autoplay; fullscreen; picture-in-picture"
       allowfullscreen>
