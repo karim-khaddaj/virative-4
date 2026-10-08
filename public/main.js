@@ -228,17 +228,19 @@
     function setStatus(text, kind) { status.textContent = text; status.className = 'form-status show ' + (kind || ''); }
     form.addEventListener('submit', function (event) {
       event.preventDefault(); clearErrors(); setStatus('', '');
-      var payload = { name: form.name.value.trim(), email: form.email.value.trim(), company: form.company.value.trim(), message: form.message.value.trim(), website: form.website.value }, errors = {};
+      var payload = { name: form.elements.namedItem('name').value.trim(), email: form.email.value.trim(), company: form.company.value.trim(), service: form.elements.namedItem('service').value, message: form.message.value.trim(), website: form.website.value }, errors = {};
       if (payload.name.length < 2) errors.name = 'Please enter your name.';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) errors.email = 'Please enter a valid email.';
       if (payload.message.length < 5) errors.message = 'Please add a short message.';
       if (Object.keys(errors).length) { showErrors(errors); return; }
       submit.disabled = true; var originalLabel = submit.textContent; submit.textContent = 'Sending…';
-      fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-        .then(function (response) { return response.json().then(function (data) { return { response: response, data: data }; }); })
-        .then(function (result) { if (result.response.ok && result.data.ok) { form.reset(); setStatus("Thanks. Your message is in. We'll be in touch.", 'ok'); } else if (result.data && result.data.errors) { showErrors(result.data.errors); setStatus('Please check the highlighted fields.', 'bad'); } else setStatus((result.data && result.data.error) || 'Something went wrong. Please try again.', 'bad'); })
-        .catch(function () { setStatus('Network error. Please try again, or email us directly.', 'bad'); })
+      payload['form-name'] = 'contact';
+      fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(payload).toString() })
+        .then(function (response) { if (!response.ok) throw new Error('Submission failed'); form.reset(); setStatus("Thanks. Your message is in. We'll be in touch.", 'ok'); })
+        .catch(function () { setStatus('Unable to send. Please try again or email hello@virative.media.', 'bad'); })
         .finally(function () { submit.disabled = false; submit.textContent = originalLabel; });
     });
   }
 })();
+
+document.querySelectorAll(".service-panel").forEach(function(panel){panel.addEventListener("transitionend",function(event){if(event.target===panel&&window.ScrollTrigger)window.ScrollTrigger.refresh();});});

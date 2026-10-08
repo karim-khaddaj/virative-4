@@ -53,3 +53,9 @@ virative/
 ├── .env.example
 └── package.json
 ```
+
+## Production contact delivery (October 2026)
+
+The Netlify deployment uses Netlify Forms (`contact`) with a honeypot. Form detection is enabled in the Netlify dashboard. Notifications are configured there for hello@virative.media; no SMTP credentials are shipped to the browser. The selected service is included in each inquiry. The older Express/SQLite API remains in the repository but is not the production form destination.
+
+The website now presents creative content and intelligent solutions, with seven services across Creative & Media and AI & Automation. Existing portfolio videos and intro are preserved.
