@@ -486,3 +486,5 @@ html.lenis,html.lenis body{height:auto;}
 .work-ai-link a{color:var(--paper);text-decoration:underline;text-decoration-color:var(--green);text-underline-offset:.25em;}
 #ai-solutions{scroll-margin-top:100px;}
 @media(max-width:620px){.hero .eyebrow{font-size:.62rem;letter-spacing:.18em;}.hero-support{padding:0;}}
+
+.nav-links .desk-nav-link{border:1px solid var(--lime,#C6FF3F);border-radius:5px;padding:10px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;color:#C6FF3F;line-height:1.2}.desk-nav-link small{font-size:9px;letter-spacing:.05em;color:#afb8a2}.nav-links .desk-nav-link:hover{background:#c6ff3f12}@media(max-width:760px){.nav-links .desk-nav-link{padding:14px 18px}.desk-nav-link small{font-size:11px}}

@@ -1,0 +1,1 @@
+for(const button of document.querySelectorAll('.language'))button.addEventListener('click',()=>{const ar=document.documentElement.lang!=='ar';document.documentElement.lang=ar?'ar':'en';document.getElementById('intro-en').hidden=ar;document.getElementById('intro-ar').hidden=!ar;document.querySelector('#intro-'+(ar?'ar':'en')+' .language').focus();});
